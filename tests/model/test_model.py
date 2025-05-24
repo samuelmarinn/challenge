@@ -82,9 +82,9 @@ class TestModel(unittest.TestCase):
         report = classification_report(target_validation, predicted_target, output_dict=True)
         
         assert report["0"]["recall"] <= 0.60
-        assert report["0"]["f1-score"] <= 0.70
+        assert report["0"]["f1-score"] <= 0.7
         assert report["1"]["recall"] >= 0.60
-        assert report["1"]["f1-score"] >= 0.28
+        assert report["1"]["f1-score"] >= 0.30
 
 
     def test_model_predict(
@@ -100,5 +100,4 @@ class TestModel(unittest.TestCase):
 
         assert isinstance(predicted_targets, list)
         assert len(predicted_targets) == features.shape[0]
-        print(type(predicted_targets[0]))
         assert all(isinstance(predicted_target, int) for predicted_target in predicted_targets)

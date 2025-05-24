@@ -39,22 +39,24 @@ class DelayModel:
             or
             pd.DataFrame: features.
         """
+        if target_column is None:
+            training_data = shuffle(
+                data[fts_cols], random_state=111
+            )
 
-        data['min_diff'] = data.apply(
-            get_min_diff, args=('Fecha-O', 'Fecha-I'), axis = 1
-        )
-        data['delay'] = np.where(data['min_diff'] > threshold_in_minutes, 1, 0)
-
-        training_data = shuffle(
-            data[fts_cols], random_state=111
-        )
+        elif target_column=='delay': 
+            training_data = shuffle(
+                data[fts_cols + ['Fecha-O', 'Fecha-I']], random_state=111
+            )
 
         features = pd.concat([
-            pd.get_dummies(data['OPERA'], prefix = 'OPERA'),
-            pd.get_dummies(data['TIPOVUELO'], prefix = 'TIPOVUELO'), 
-            pd.get_dummies(data['MES'], prefix = 'MES')], 
+            pd.get_dummies(training_data['OPERA'], prefix = 'OPERA'),
+            pd.get_dummies(training_data['TIPOVUELO'], prefix = 'TIPOVUELO'), 
+            pd.get_dummies(training_data['MES'], prefix = 'MES')], 
             axis = 1
         )
+
+        features = features.reindex(columns=top_fts, fill_value=False)
 
         features_tr = features[top_fts]
 
@@ -62,15 +64,16 @@ class DelayModel:
             return features_tr
         
         else:
-
+            training_data['min_diff'] = training_data.apply(
+                get_min_diff, args=('Fecha-O', 'Fecha-I'), axis = 1
+            )
+            training_data['delay'] = np.where(training_data['min_diff'] > threshold_in_minutes, 1, 0)
             return [features_tr, pd.DataFrame(training_data[target_column])]
 
     def fit(
         self,
         features: pd.DataFrame,
         target: pd.DataFrame,
-        test_size: float=TEST_SIZE,
-        random_state: int=RANDOM_STATE
     ) -> None:
         """
         Fit model with preprocessed data.
@@ -81,15 +84,13 @@ class DelayModel:
             test_size(float): test/train size split. Defaults to constant TEST_SIZE
             random_state(int): Random seed. Defaults to RANDOM_STATE constant
         """
-        x_train, _, y_train, _ = train_test_split(
-            features, target[target.columns[0]], test_size = test_size, random_state = random_state
-        ) ###added to avoid overfitting
 
-        n_y0 = len(y_train[y_train == 0])
-        n_y1 = len(y_train[y_train == 1])
+        y = target[target.columns[0]]
+        n_y0 = len(y[y == 0])
+        n_y1 = len(y[y == 1])
 
-        self._model.set_params(class_weight={1: n_y0/len(y_train.index), 0: n_y1/len(y_train.index)})
-        self._model.fit (x_train, y_train)
+        self._model.set_params(class_weight={1: n_y0/len(y.index), 0: n_y1/len(y.index)})
+        self._model.fit (features, y)
 
     def predict(
         self,
