@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 RANDOM_STATE = 42
 TEST_SIZE = 0.33
 
-FTS_COLNAMES = ['OPERA', 'MES', 'TIPOVUELO', 'SIGLADES', 'DIANOM', 'delay']
+FTS_COLNAMES = ['OPERA', 'MES', 'TIPOVUELO']
 TOP_10_FTS = [
     "OPERA_Latin American Wings", 
     "MES_7",
@@ -19,3 +19,5 @@ TOP_10_FTS = [
 
 
 BEST_MODEL = LogisticRegression() ### check data/challenge.md to see model selection
+TRAIN_DATA_PATH = "data/data.csv"
+MODEL_NAME = 'delay_model_logreg.pkl'
