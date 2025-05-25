@@ -1,13 +1,11 @@
 import numpy as np
 import pandas as pd
 
-from typing import Tuple, Union, List
-
-from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+from typing import Tuple, List
 
 from challenge.pandas_utils import get_min_diff
-from challenge.settings import BEST_MODEL, FTS_COLNAMES, RANDOM_STATE, TEST_SIZE, TOP_10_FTS
+from challenge.settings import BEST_MODEL, FTS_COLNAMES, TOP_10_FTS
 
 class DelayModel:
 
@@ -32,7 +30,7 @@ class DelayModel:
             fts_cols (List(str)): List of features column names
             target_column (str, optional): if set, the target is returned. Defaults to FTS_COLNAMES
             threshols_in_minutes (int): Max delay of flights. Defaults to 15
-            top_10_fts (List(str)): List of top features columns. Defaults to TOP_10_FTS
+            top_fts (List(str)): List of top features columns. Defaults to TOP_10_FTS
 
         Returns:
             Tuple[pd.DataFrame, pd.DataFrame]: features and target.
@@ -81,8 +79,6 @@ class DelayModel:
         Args:
             features (pd.DataFrame): preprocessed data.
             target (pd.DataFrame): target.
-            test_size(float): test/train size split. Defaults to constant TEST_SIZE
-            random_state(int): Random seed. Defaults to RANDOM_STATE constant
         """
 
         y = target[target.columns[0]]

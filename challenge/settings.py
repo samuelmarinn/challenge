@@ -1,8 +1,5 @@
 from sklearn.linear_model import LogisticRegression
 
-RANDOM_STATE = 42
-TEST_SIZE = 0.33
-
 FTS_COLNAMES = ['OPERA', 'MES', 'TIPOVUELO']
 TOP_10_FTS = [
     "OPERA_Latin American Wings", 

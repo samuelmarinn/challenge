@@ -1,4 +1,10 @@
-## Model Dvelopment
+## General cosiderations
+
+- This proejct was developed using python 3.12.3
+- Docker should be installed to make changes in the project
+- For deployment in windows, is highly recommended to install WSL in order to run makefile
+
+## Model Development
 
 ### Considerations
 
@@ -16,3 +22,4 @@
 
 - In tests/api/api_tests.py, the response code in all test_should_failed_unkown_column is changed from 400 to 422, as 422 is the correct code indicating incorrect values on columns
 - In tests/api/api_tests.py, a default model and logistic regression are created, according to the implementation of the api
+
