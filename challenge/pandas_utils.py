@@ -1,3 +1,4 @@
+"""Pandas dataframes and series transformation modules"""
 import pandas as pd
 
 from datetime import datetime
