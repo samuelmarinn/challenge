@@ -1,11 +1,20 @@
+"""Tests for api implementation"""
+import numpy as np
 import unittest
 
 from fastapi.testclient import TestClient
+from mockito import when, ANY
+from sklearn.linear_model import LogisticRegression
+
 from challenge import app
+from challenge.model import DelayModel
 
 
 class TestBatchPipeline(unittest.TestCase):
     def setUp(self):
+
+        app.state.delay_model = DelayModel()
+        app.state.delay_model.model = LogisticRegression()
         self.client = TestClient(app)
         
     def test_should_get_predict(self):
@@ -18,7 +27,7 @@ class TestBatchPipeline(unittest.TestCase):
                 }
             ]
         }
-        # when("xgboost.XGBClassifier").predict(ANY).thenReturn(np.array([0])) # change this line to the model of chosing
+        when(LogisticRegression).predict(ANY).thenReturn(np.array([0]))
         response = self.client.post("/predict", json=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"predict": [0]})
@@ -34,9 +43,9 @@ class TestBatchPipeline(unittest.TestCase):
                 }
             ]
         }
-        # when("xgboost.XGBClassifier").predict(ANY).thenReturn(np.array([0]))# change this line to the model of chosing
+        when(LogisticRegression).predict(ANY).thenReturn(np.array([0]))
         response = self.client.post("/predict", json=data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
 
     def test_should_failed_unkown_column_2(self):
         data = {        
@@ -48,9 +57,9 @@ class TestBatchPipeline(unittest.TestCase):
                 }
             ]
         }
-        # when("xgboost.XGBClassifier").predict(ANY).thenReturn(np.array([0]))# change this line to the model of chosing
+        when(LogisticRegression).predict(ANY).thenReturn(np.array([0]))
         response = self.client.post("/predict", json=data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
     
     def test_should_failed_unkown_column_3(self):
         data = {        
@@ -62,6 +71,6 @@ class TestBatchPipeline(unittest.TestCase):
                 }
             ]
         }
-        # when("xgboost.XGBClassifier").predict(ANY).thenReturn(np.array([0]))
+        when(LogisticRegression).predict(ANY).thenReturn(np.array([0]))
         response = self.client.post("/predict", json=data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
