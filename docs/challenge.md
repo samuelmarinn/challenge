@@ -1,5 +1,6 @@
 ## General cosiderations
 
+- This proejct was developed using python 3.12.3
 - Docker should be installed to make changes in the project
 - For deployment in windows, is highly recommended to install WSL in order to run makefile
 
