@@ -1,3 +1,4 @@
+"""Prediction models implementation"""
 import numpy as np
 import pandas as pd
 

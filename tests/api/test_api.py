@@ -1,3 +1,4 @@
+"""Tests for api implementation"""
 import numpy as np
 import unittest
 

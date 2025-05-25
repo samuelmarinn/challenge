@@ -1,3 +1,4 @@
+"""Stress tests for deployed api"""
 from locust import HttpUser, task
 
 class StressUser(HttpUser):

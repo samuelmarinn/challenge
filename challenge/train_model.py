@@ -1,3 +1,4 @@
+"""Best model training script"""
 import pandas as pd
 from challenge.model import DelayModel
 import joblib

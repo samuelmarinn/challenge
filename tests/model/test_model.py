@@ -1,3 +1,4 @@
+"""Tests for model implementation"""
 import unittest
 import pandas as pd
 
